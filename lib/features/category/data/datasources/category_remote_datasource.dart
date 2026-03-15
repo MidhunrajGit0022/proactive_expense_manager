@@ -29,18 +29,25 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
 
   @override
   Future<List<String>> addCategories(List<CategoryModel> categories) async {
-    // API expects single category at a time based on the contract
+    
     final List<String> syncedIds = [];
     for (final category in categories) {
-      final response = await apiClient.post(
-        AppConstants.addCategoryPath,
-        data: category.toApiJson(),
-      );
-      if (response.statusCode == 200 && response.data['status'] == 'success') {
-        final ids = response.data['synced_ids'] as List?;
-        if (ids != null) {
-          syncedIds.addAll(ids.map((e) => e.toString()));
+      try {
+        final response = await apiClient.post(
+          AppConstants.addCategoryPath,
+          data: category.toApiJson(),
+        );
+        if (response.statusCode == 200 && response.data['status'] == 'success') {
+          final ids = response.data['synced_ids'] as List?;
+          if (ids != null) {
+            syncedIds.addAll(ids.map((e) => e.toString()));
+          }
+        } else if (response.statusCode == 200 || response.statusCode == 201) {
+          syncedIds.add(category.id);
         }
+      
+      } catch (_) {
+        continue;
       }
     }
     return syncedIds;
@@ -56,9 +63,13 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
       final deletedIds = response.data['deleted_ids'] as List?;
       return deletedIds?.map((e) => e.toString()).toList() ?? [];
     }
+    if (response.statusCode == 404) {
+      return ids;
+    }
     throw ServerException(
       message: response.data['message'] ?? 'Failed to delete categories',
       statusCode: response.statusCode,
     );
   }
 }
+

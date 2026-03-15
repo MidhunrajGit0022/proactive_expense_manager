@@ -120,7 +120,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Nickname Section
               Text('NICKNAME', style: _sectionLabel),
               const SizedBox(height: 8),
               Container(
@@ -185,7 +184,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Alert Limit Section
               _buildDivider(),
               Container(
                 padding: const EdgeInsets.all(16),
@@ -260,7 +258,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Categories Section
               _buildDivider(), Text('CATEGORIES', style: _sectionLabel),
               const SizedBox(height: 10),
               Container(
@@ -274,7 +271,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Add Category
                     Container(
                       child: Row(
                         children: [
@@ -325,7 +321,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     const SizedBox(height: 16), _buildDivider(),
-                    // Category List
                     BlocBuilder<CategoryBloc, CategoryState>(
                       builder: (context, state) {
                         if (state is CategoryLoaded) {
@@ -390,21 +385,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               const SizedBox(height: 20),
 
-              // Sync Section
               _buildDivider(),
               Text('CLOUD SYNC', style: _sectionLabel),
               const SizedBox(height: 10),
               BlocConsumer<SyncBloc, SyncState>(
                 listener: (context, state) {
                   if (state is SyncCompleted) {
+                    final r = state.result;
+                    final msg = r.hasErrors
+                        ? 'Synced ${r.totalSynced} items, cleaned ${r.totalDeleted} items\nWarnings:\n${r.errors.join('\n')}'
+                        : 'Synced ${r.totalSynced} items, cleaned ${r.totalDeleted} items';
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          'Synced ${state.result.totalSynced} items, cleaned ${state.result.totalDeleted} items',
+                          msg,
                           style: GoogleFonts.inter(),
                         ),
-                        backgroundColor: AppColors.successGreen,
+                        backgroundColor: r.hasErrors
+                            ? Colors.orange
+                            : AppColors.successGreen,
                         behavior: SnackBarBehavior.floating,
+                        duration: Duration(seconds: r.hasErrors ? 5 : 3),
                       ),
                     );
                   } else if (state is SyncFailed) {
@@ -477,7 +478,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Logout Button
               Center(
                 child: TextButton.icon(
                   onPressed: _logout,

@@ -28,6 +28,18 @@ class ApiClient {
     return headers;
   }
 
+
+  dynamic _safeDecode(String body, int statusCode) {
+    try {
+      return jsonDecode(body);
+    } on FormatException {
+      return {
+        'status': 'error',
+        'message': 'Server returned non-JSON response (status $statusCode)',
+      };
+    }
+  }
+
   Future<ApiResponse> post(String path, {dynamic data}) async {
     try {
       final url = Uri.parse('$_baseUrl$path');
@@ -38,7 +50,7 @@ class ApiClient {
         body: data != null ? jsonEncode(data) : null,
       );
       return ApiResponse(
-        data: jsonDecode(response.body),
+        data: _safeDecode(response.body, response.statusCode),
         statusCode: response.statusCode,
       );
     } catch (e) {
@@ -55,7 +67,7 @@ class ApiClient {
       final headers = await _getHeaders();
       final response = await _client.get(uri, headers: headers);
       return ApiResponse(
-        data: jsonDecode(response.body),
+        data: _safeDecode(response.body, response.statusCode),
         statusCode: response.statusCode,
       );
     } catch (e) {
@@ -73,7 +85,7 @@ class ApiClient {
         body: data != null ? jsonEncode(data) : null,
       );
       return ApiResponse(
-        data: jsonDecode(response.body),
+        data: _safeDecode(response.body, response.statusCode),
         statusCode: response.statusCode,
       );
     } catch (e) {
@@ -81,3 +93,4 @@ class ApiClient {
     }
   }
 }
+

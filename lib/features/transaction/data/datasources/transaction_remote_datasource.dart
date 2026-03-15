@@ -29,20 +29,21 @@ class TransactionRemoteDataSourceImpl implements TransactionRemoteDataSource {
 
   @override
   Future<List<String>> addTransactions(List<TransactionModel> transactions) async {
-    final response = await apiClient.post(
-      AppConstants.addTransactionsPath,
-      data: {
-        'transactions': transactions.map((t) => t.toApiJson()).toList(),
-      },
-    );
-    if (response.statusCode == 200 && response.data['status'] == 'success') {
-      final ids = response.data['synced_ids'] as List?;
-      return ids?.map((e) => e.toString()).toList() ?? [];
+    try {
+      final response = await apiClient.post(
+        AppConstants.addTransactionsPath,
+        data: {
+          'transactions': transactions.map((t) => t.toApiJson()).toList(),
+        },
+      );
+      if (response.statusCode == 200 && response.data['status'] == 'success') {
+        final ids = response.data['synced_ids'] as List?;
+        return ids?.map((e) => e.toString()).toList() ?? [];
+      }
+      return [];
+    } catch (_) {
+      return [];
     }
-    throw ServerException(
-      message: response.data['message'] ?? 'Failed to sync transactions',
-      statusCode: response.statusCode,
-    );
   }
 
   @override
@@ -54,6 +55,9 @@ class TransactionRemoteDataSourceImpl implements TransactionRemoteDataSource {
     if (response.statusCode == 200 && response.data['status'] == 'success') {
       final deletedIds = response.data['deleted_ids'] as List?;
       return deletedIds?.map((e) => e.toString()).toList() ?? [];
+    }
+    if (response.statusCode == 404) {
+      return ids;
     }
     throw ServerException(
       message: response.data['message'] ?? 'Failed to delete transactions',

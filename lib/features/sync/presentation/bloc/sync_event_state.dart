@@ -11,7 +11,6 @@ class StartSyncEvent extends SyncEvent {
   const StartSyncEvent();
 }
 
-// States
 abstract class SyncState extends Equatable {
   const SyncState();
   @override

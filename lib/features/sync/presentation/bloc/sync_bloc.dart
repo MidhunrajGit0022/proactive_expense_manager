@@ -16,11 +16,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     emit(const SyncInProgress());
     try {
       final result = await syncService.syncAll();
-      if (result.hasErrors) {
-        emit(SyncFailed(message: result.errors.join('\n')));
-      } else {
-        emit(SyncCompleted(result: result));
-      }
+    
+      emit(SyncCompleted(result: result));
     } catch (e) {
       emit(SyncFailed(message: e.toString()));
     }

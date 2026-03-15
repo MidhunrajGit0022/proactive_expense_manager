@@ -6,6 +6,7 @@ abstract class CategoryLocalDataSource {
   Future<void> insertCategory(CategoryModel category);
   Future<void> softDeleteCategory(String id);
   Future<List<CategoryModel>> getUnsyncedCategories();
+  Future<void> permanentlyDeleteUnsynced();
   Future<List<CategoryModel>> getDeletedCategories();
   Future<void> markAsSynced(List<String> ids);
   Future<void> permanentlyDelete(List<String> ids);
@@ -58,12 +59,23 @@ class CategoryLocalDataSourceImpl implements CategoryLocalDataSource {
   @override
   Future<List<CategoryModel>> getDeletedCategories() async {
     final db = await databaseHelper.database;
+
     final result = await db.query(
       'categories',
-      where: 'is_deleted = ?',
-      whereArgs: [1],
+      where: 'is_deleted = ? AND is_synced = ?',
+      whereArgs: [1, 1],
     );
     return result.map((map) => CategoryModel.fromMap(map)).toList();
+  }
+
+  @override
+  Future<void> permanentlyDeleteUnsynced() async {
+    final db = await databaseHelper.database;
+    await db.delete(
+      'categories',
+      where: 'is_deleted = ? AND is_synced = ?',
+      whereArgs: [1, 0],
+    );
   }
 
   @override

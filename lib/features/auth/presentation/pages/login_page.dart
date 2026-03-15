@@ -86,7 +86,6 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   const SizedBox(height: 60),
 
-                  // Title
                   Text(
                     'Get Started',
                     style: GoogleFonts.inter(
@@ -99,7 +98,6 @@ class _LoginPageState extends State<LoginPage> {
 
                   const SizedBox(height: 8),
 
-                  // Subtitle
                   Text(
                     'Log In Using Phone & OTP',
                     style: GoogleFonts.inter(
@@ -111,7 +109,6 @@ class _LoginPageState extends State<LoginPage> {
 
                   const SizedBox(height: 40),
 
-                  // Phone Input Field
                   Container(
                     decoration: BoxDecoration(
                       color: const Color(0xFF1E1E1E),
@@ -123,7 +120,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: Row(
                       children: [
-                        // Country Code
                         Padding(
                           padding: const EdgeInsets.only(left: 16),
                           child: Text(
@@ -136,7 +132,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
 
-                        // Divider
                         Container(
                           height: 24,
                           width: 1,
@@ -144,7 +139,6 @@ class _LoginPageState extends State<LoginPage> {
                           color: const Color(0xFF3A3A3C),
                         ),
 
-                        // Phone text field
                         Expanded(
                           child: TextField(
                             controller: _phoneController,
@@ -177,7 +171,6 @@ class _LoginPageState extends State<LoginPage> {
 
                   const SizedBox(height: 24),
 
-                  // Continue Button
                   BlocBuilder<AuthBloc, AuthState>(
                     builder: (context, state) {
                       final isLoading = state is AuthLoading;

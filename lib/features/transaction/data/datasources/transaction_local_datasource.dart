@@ -10,6 +10,7 @@ abstract class TransactionLocalDataSource {
   Future<double> getMonthlyTotal(String type);
   Future<List<TransactionModel>> getUnsyncedTransactions();
   Future<List<TransactionModel>> getDeletedTransactions();
+  Future<void> permanentlyDeleteUnsynced();
   Future<void> markAsSynced(List<String> ids);
   Future<void> permanentlyDelete(List<String> ids);
 }
@@ -19,7 +20,6 @@ class TransactionLocalDataSourceImpl implements TransactionLocalDataSource {
 
   TransactionLocalDataSourceImpl({required this.databaseHelper});
 
-  /// SQL JOIN to fetch category name for each transaction
   static const String _joinQuery = '''
     SELECT t.*, c.name as category_name
     FROM transactions t
@@ -99,10 +99,20 @@ class TransactionLocalDataSourceImpl implements TransactionLocalDataSource {
     final db = await databaseHelper.database;
     final result = await db.query(
       'transactions',
-      where: 'is_deleted = ?',
-      whereArgs: [1],
+      where: 'is_deleted = ? AND is_synced = ?',
+      whereArgs: [1, 1],
     );
     return result.map((map) => TransactionModel.fromMap(map)).toList();
+  }
+
+  @override
+  Future<void> permanentlyDeleteUnsynced() async {
+    final db = await databaseHelper.database;
+    await db.delete(
+      'transactions',
+      where: 'is_deleted = ? AND is_synced = ?',
+      whereArgs: [1, 0],
+    );
   }
 
   @override

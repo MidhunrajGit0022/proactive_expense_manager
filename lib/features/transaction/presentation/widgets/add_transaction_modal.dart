@@ -87,7 +87,6 @@ class _AddTransactionModalState extends State<AddTransactionModal> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -113,7 +112,6 @@ class _AddTransactionModalState extends State<AddTransactionModal> {
           ),
           const SizedBox(height: 24),
 
-          // Expense / Income Toggle
           Container(
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
@@ -175,7 +173,6 @@ class _AddTransactionModalState extends State<AddTransactionModal> {
           ),
           const SizedBox(height: 20),
 
-          // Title Input
           Container(
             decoration: BoxDecoration(
               color: AppColors.cardGrey,
@@ -197,7 +194,6 @@ class _AddTransactionModalState extends State<AddTransactionModal> {
           ),
           const SizedBox(height: 12),
 
-          // Amount Input
           Container(
             decoration: BoxDecoration(
               color: AppColors.cardGrey,
@@ -227,7 +223,6 @@ class _AddTransactionModalState extends State<AddTransactionModal> {
           ),
           const SizedBox(height: 20),
 
-          // Category Label
           Text(
             'CATEGORY',
             style: GoogleFonts.inter(
@@ -239,7 +234,6 @@ class _AddTransactionModalState extends State<AddTransactionModal> {
           ),
           const SizedBox(height: 10),
 
-          // Category Chips
           BlocBuilder<CategoryBloc, CategoryState>(
             builder: (context, state) {
               if (state is CategoryLoaded) {
@@ -293,7 +287,6 @@ class _AddTransactionModalState extends State<AddTransactionModal> {
           ),
           const SizedBox(height: 20),
 
-          // Info Banner
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             decoration: BoxDecoration(
@@ -322,7 +315,6 @@ class _AddTransactionModalState extends State<AddTransactionModal> {
           ),
           const SizedBox(height: 20),
 
-          // Save Button
           SizedBox(
             width: double.infinity,
             height: 54,

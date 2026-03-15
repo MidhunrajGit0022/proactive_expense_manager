@@ -59,7 +59,24 @@ class CategoryRepositoryImpl implements CategoryRepository {
     try {
       final unsynced = await localDataSource.getUnsyncedCategories();
       if (unsynced.isEmpty) return const Right([]);
+
       final syncedIds = await remoteDataSource.addCategories(unsynced);
+
+     
+      final unsyncedIdSet = unsynced.map((c) => c.id).toSet();
+      final reportedSet = syncedIds.toSet();
+      final notReported = unsyncedIdSet.difference(reportedSet);
+
+      if (notReported.isNotEmpty) {
+        try {
+          final serverCategories = await remoteDataSource.getCategories();
+          final serverIdSet = serverCategories.map((c) => c.id).toSet();
+          final alreadyOnServer = notReported.intersection(serverIdSet);
+          syncedIds.addAll(alreadyOnServer);
+        } catch (_) {
+        }
+      }
+
       await localDataSource.markAsSynced(syncedIds);
       return Right(syncedIds);
     } catch (e) {
@@ -70,6 +87,9 @@ class CategoryRepositoryImpl implements CategoryRepository {
   @override
   Future<Either<Failure, List<String>>> purgeDeletedCategories() async {
     try {
+     
+      await localDataSource.permanentlyDeleteUnsynced();
+
       final deleted = await localDataSource.getDeletedCategories();
       if (deleted.isEmpty) return const Right([]);
       final ids = deleted.map((c) => c.id).toList();

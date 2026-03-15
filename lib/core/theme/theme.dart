@@ -18,7 +18,6 @@ class AppTheme {
           bodyLarge: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.normal,
-            // color: AppColors.textGrey,
           ),
         ),
       ),

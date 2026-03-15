@@ -32,13 +32,11 @@ class InjectionContainer {
   static late final NotificationService _notificationService;
   static const Uuid _uuid = Uuid();
 
-  // Auth
   static late final AuthRemoteDataSourceImpl _authRemoteDataSource;
   static late final AuthRepositoryImpl _authRepository;
   static late final SendOtp _sendOtp;
   static late final CreateAccount _createAccount;
 
-  // Category
   static late final CategoryLocalDataSourceImpl _categoryLocalDataSource;
   static late final CategoryRemoteDataSourceImpl _categoryRemoteDataSource;
   static late final CategoryRepositoryImpl _categoryRepository;
@@ -46,7 +44,6 @@ class InjectionContainer {
   static late final AddCategory _addCategory;
   static late final DeleteCategory _deleteCategory;
 
-  // Transaction
   static late final TransactionLocalDataSourceImpl _transactionLocalDataSource;
   static late final TransactionRemoteDataSourceImpl _transactionRemoteDataSource;
   static late final TransactionRepositoryImpl _transactionRepository;
@@ -54,23 +51,18 @@ class InjectionContainer {
   static late final AddTransaction _addTransaction;
   static late final DeleteTransaction _deleteTransaction;
 
-  // Sync
   static late final SyncService _syncService;
 
   static Future<void> init() async {
-    // External
     _sharedPreferences = await SharedPreferences.getInstance();
 
-    // Core
     _apiClient = ApiClient();
     _databaseHelper = DatabaseHelper();
     _notificationService = NotificationService();
     await _notificationService.init();
 
-    // Ensure DB is initialized
     await _databaseHelper.database;
 
-    // Auth
     _authRemoteDataSource = AuthRemoteDataSourceImpl(apiClient: _apiClient);
     _authRepository = AuthRepositoryImpl(
       remoteDataSource: _authRemoteDataSource,
@@ -79,7 +71,6 @@ class InjectionContainer {
     _sendOtp = SendOtp(_authRepository);
     _createAccount = CreateAccount(_authRepository);
 
-    // Category
     _categoryLocalDataSource = CategoryLocalDataSourceImpl(databaseHelper: _databaseHelper);
     _categoryRemoteDataSource = CategoryRemoteDataSourceImpl(apiClient: _apiClient);
     _categoryRepository = CategoryRepositoryImpl(
@@ -91,7 +82,6 @@ class InjectionContainer {
     _addCategory = AddCategory(_categoryRepository);
     _deleteCategory = DeleteCategory(_categoryRepository);
 
-    // Transaction
     _transactionLocalDataSource = TransactionLocalDataSourceImpl(databaseHelper: _databaseHelper);
     _transactionRemoteDataSource = TransactionRemoteDataSourceImpl(apiClient: _apiClient);
     _transactionRepository = TransactionRepositoryImpl(
@@ -103,7 +93,6 @@ class InjectionContainer {
     _addTransaction = AddTransaction(_transactionRepository);
     _deleteTransaction = DeleteTransaction(_transactionRepository);
 
-    // Sync
     _syncService = SyncService(
       categoryRepository: _categoryRepository,
       transactionRepository: _transactionRepository,

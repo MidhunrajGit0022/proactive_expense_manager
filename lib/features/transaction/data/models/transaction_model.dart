@@ -13,7 +13,6 @@ class TransactionModel extends TransactionEntity {
     required super.timestamp,
   });
 
-  /// From SQLite JOIN result (includes category_name)
   factory TransactionModel.fromMap(Map<String, dynamic> map) {
     return TransactionModel(
       id: map['id'] as String,
@@ -28,7 +27,6 @@ class TransactionModel extends TransactionEntity {
     );
   }
 
-  /// From API response
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
     return TransactionModel(
       id: json['id'] as String,

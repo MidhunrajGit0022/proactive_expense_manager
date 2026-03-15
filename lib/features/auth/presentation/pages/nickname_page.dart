@@ -93,7 +93,6 @@ class _NicknamePageState extends State<NicknamePage> {
               children: [
                 const SizedBox(height: 32),
 
-                // Title with Emoji
                 Text(
                   '👋 What should we call you?',
                   style: GoogleFonts.inter(
@@ -106,7 +105,6 @@ class _NicknamePageState extends State<NicknamePage> {
 
                 const SizedBox(height: 12),
 
-                // Subtitle
                 Text(
                   'This name stays only on your device.',
                   style: GoogleFonts.inter(
@@ -118,7 +116,6 @@ class _NicknamePageState extends State<NicknamePage> {
 
                 const SizedBox(height: 48),
 
-                // Nickname Input Field
                 Container(
                   decoration: BoxDecoration(
                     color: const Color(0xFF1C1C1E),
@@ -155,7 +152,6 @@ class _NicknamePageState extends State<NicknamePage> {
 
                 const SizedBox(height: 24),
 
-                // Continue Button
                 BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;

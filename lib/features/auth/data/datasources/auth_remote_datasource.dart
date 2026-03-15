@@ -5,14 +5,8 @@ import 'package:dummyexpense/features/auth/data/models/auth_response_model.dart'
 import 'package:dummyexpense/features/auth/data/models/create_account_response_model.dart';
 
 abstract class AuthRemoteDataSource {
-  /// Calls the POST /auth/send-otp/ endpoint.
-  ///
-  /// Throws a [ServerException] for all error codes.
   Future<AuthResponseModel> sendOtp(String phone);
 
-  /// Calls the POST /auth/create-account/ endpoint.
-  ///
-  /// Throws a [ServerException] for all error codes.
   Future<CreateAccountResponseModel> createAccount(String phone, String nickname);
 }
 

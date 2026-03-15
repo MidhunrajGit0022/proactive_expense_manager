@@ -22,7 +22,6 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final response = await remoteDataSource.sendOtp(phone);
 
-      // Save token and phone for later use
       await sharedPreferences.setString(AppConstants.authTokenKey, response.token);
       await sharedPreferences.setString(AppConstants.phoneKey, phone);
       if (response.nickname != null) {
@@ -44,7 +43,6 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final response = await remoteDataSource.createAccount(phone, nickname);
 
-      // Save token and nickname to SharedPreferences
       await sharedPreferences.setString(AppConstants.authTokenKey, response.token);
       await sharedPreferences.setString(AppConstants.nicknameKey, nickname);
 

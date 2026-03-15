@@ -57,7 +57,6 @@ class TransactionRepositoryImpl implements TransactionRepository {
         timestamp: DateTime.now(),
       );
       await localDataSource.insertTransaction(transaction);
-      // Re-fetch to get the JOIN'd category name
       final allTransactions = await localDataSource.getRecentTransactions(1);
       if (allTransactions.isNotEmpty) {
         return Right(allTransactions.first);
@@ -103,7 +102,24 @@ class TransactionRepositoryImpl implements TransactionRepository {
     try {
       final unsynced = await localDataSource.getUnsyncedTransactions();
       if (unsynced.isEmpty) return const Right([]);
+
       final syncedIds = await remoteDataSource.addTransactions(unsynced);
+
+   
+      final unsyncedIdSet = unsynced.map((t) => t.id).toSet();
+      final reportedSet = syncedIds.toSet();
+      final notReported = unsyncedIdSet.difference(reportedSet);
+
+      if (notReported.isNotEmpty) {
+        try {
+          final serverTransactions = await remoteDataSource.getTransactions();
+          final serverIdSet = serverTransactions.map((t) => t.id).toSet();
+          final alreadyOnServer = notReported.intersection(serverIdSet);
+          syncedIds.addAll(alreadyOnServer);
+        } catch (_) {
+        }
+      }
+
       await localDataSource.markAsSynced(syncedIds);
       return Right(syncedIds);
     } catch (e) {
@@ -114,6 +130,8 @@ class TransactionRepositoryImpl implements TransactionRepository {
   @override
   Future<Either<Failure, List<String>>> purgeDeletedTransactions() async {
     try {
+      await localDataSource.permanentlyDeleteUnsynced();
+
       final deleted = await localDataSource.getDeletedTransactions();
       if (deleted.isEmpty) return const Right([]);
       final ids = deleted.map((t) => t.id).toList();

@@ -198,7 +198,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Row(
       children: [
-        // Income Card
         Expanded(
           child: Container(
             padding: const EdgeInsets.all(16),
@@ -249,7 +248,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const SizedBox(width: 12),
-        // Expense Card
         Expanded(
           child: Container(
             padding: const EdgeInsets.all(16),

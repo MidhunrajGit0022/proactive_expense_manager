@@ -127,7 +127,6 @@ class _OtpPageState extends State<OtpPage> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is OtpVerifiedState) {
-            // Existing user – navigate to Home (pop to first route)
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
@@ -146,7 +145,6 @@ class _OtpPageState extends State<OtpPage> {
               (route) => false,
             );
           } else if (state is NicknameRequiredState) {
-            // New user – navigate to Nickname page
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -169,7 +167,6 @@ class _OtpPageState extends State<OtpPage> {
               ),
             );
           } else if (state is OtpSentState) {
-            // OTP resent – update the displayed OTP
             setState(() {
               _displayOtp = state.otp;
             });
@@ -197,7 +194,6 @@ class _OtpPageState extends State<OtpPage> {
               children: [
                 const SizedBox(height: 16),
 
-                // Back Button
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
                   child: Container(
@@ -221,7 +217,6 @@ class _OtpPageState extends State<OtpPage> {
 
                 const SizedBox(height: 32),
 
-                // Title
                 Text(
                   'Verify OTP',
                   style: GoogleFonts.inter(
@@ -234,7 +229,6 @@ class _OtpPageState extends State<OtpPage> {
 
                 const SizedBox(height: 8),
 
-                // Subtitle with masked phone
                 Text(
                   'Enter the 6-Digit code sent to $_maskedPhone',
                   style: GoogleFonts.inter(
@@ -246,7 +240,6 @@ class _OtpPageState extends State<OtpPage> {
 
                 const SizedBox(height: 4),
 
-                // Change Number link
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
                   child: Text(
@@ -261,7 +254,6 @@ class _OtpPageState extends State<OtpPage> {
 
                 const SizedBox(height: 24),
 
-                // OTP Display Banner (for testing)
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(
@@ -307,7 +299,6 @@ class _OtpPageState extends State<OtpPage> {
 
                 const SizedBox(height: 24),
 
-                // OTP Input Fields
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: List.generate(
@@ -327,7 +318,6 @@ class _OtpPageState extends State<OtpPage> {
 
                 const SizedBox(height: 32),
 
-                // Verify Button
                 BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
@@ -369,7 +359,6 @@ class _OtpPageState extends State<OtpPage> {
 
                 const SizedBox(height: 24),
 
-                // Resend OTP
                 Row(
                   children: [
                     Text(

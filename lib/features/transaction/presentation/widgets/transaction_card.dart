@@ -47,7 +47,6 @@ class TransactionCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Category Icon
           Container(
             width: 40,
             height: 40,
@@ -62,7 +61,6 @@ class TransactionCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          // Title & Category
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +86,6 @@ class TransactionCard extends StatelessWidget {
               ],
             ),
           ),
-          // Date & Amount
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -110,7 +107,6 @@ class TransactionCard extends StatelessWidget {
               ),
             ],
           ),
-          // Delete Button
           if (onDelete != null) ...[
             const SizedBox(width: 8),
             GestureDetector(
